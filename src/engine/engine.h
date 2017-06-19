@@ -41,6 +41,8 @@ public:
 	{
 		void* window_handle;
 		void* display;
+		void* session;
+		void* compositor;
 	};
 
 public:

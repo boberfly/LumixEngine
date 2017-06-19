@@ -61,6 +61,8 @@ struct PlatformData
 	void* context;		//< GL context, or D3D device
 	void* backBuffer;   //< GL backbuffer, or D3D render target view
 	void* backBufferDS; //< Backbuffer depth/stencil.
+	void* session;      //!< ovrSession, for Oculus SDK
+	void* compositor;   //!< IVRCompositor, for OpenVR SDK
 };
 
 
@@ -617,6 +619,18 @@ struct RendererImpl LUMIX_FINAL : public Renderer
 
 		bool res = bgfx::init(renderer_type, 0, 0, &m_callback_stub, &m_bgfx_allocator);
 		ASSERT(res);
+
+		// Get any VR devices from bgfx.
+		if (hasHMD())
+		{
+			bgfx::InternalData internalData;
+			internalData = bgfx::getInternalData();
+			PlatformData platformData = engine.getPlatformData();
+			platformData.session = internalData.session;
+			platformData.compositor = internalData.compositor;
+			engine.setPlatformData(platformData);
+		}
+
 		bgfx::reset(800, 600);
 		bgfx::setDebug(BGFX_DEBUG_TEXT);
 
@@ -690,6 +704,12 @@ struct RendererImpl LUMIX_FINAL : public Renderer
 	{
 		return bgfx::getRendererType() == bgfx::RendererType::OpenGL ||
 			   bgfx::getRendererType() == bgfx::RendererType::OpenGLES;
+	}
+
+
+	bool hasHMD() const override
+	{
+		return 0 != (bgfx::getCaps()->supported & BGFX_CAPS_HMD);
 	}
 
 
