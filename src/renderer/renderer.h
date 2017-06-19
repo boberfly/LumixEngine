@@ -47,6 +47,7 @@ class LUMIX_RENDERER_API Renderer : public IPlugin
 		virtual const bgfx::UniformHandle& getMaterialColorUniform() const = 0;
 		virtual const bgfx::UniformHandle& getRoughnessMetallicUniform() const = 0;
 		virtual bool isOpenGL() const = 0;
+		virtual bool hasHMD() const = 0;
 		virtual int getLayersCount() const = 0;
 		virtual int getLayer(const char* name) = 0;
 		virtual const char* getLayerName(int idx) const = 0;

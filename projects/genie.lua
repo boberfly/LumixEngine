@@ -553,7 +553,7 @@ project "renderer"
 	useLua()
 	
 	configuration { "windows", "not asmjs" }
-		links { "psapi" }
+		links { "psapi", "openvr_api" }
 
 	defaultConfigurations()
 
